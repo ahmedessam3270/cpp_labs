@@ -50,24 +50,21 @@ public:
         return result;
     }
 
-    void display()
-    {
-        if (real == 0 && imag == 0)
-        {
+    void display() {
+    if (real == 0 ) {
+        if (imag != 0) {
+            cout << imag << "j" << endl;
+        } else {
             cout << "No Data" << endl;
-            return;
         }
-        else if (real)
-        {
-            cout << real;
+    } else {
+        if (imag == 0) {
+            cout << real << endl;
+        } else {
+            cout << real << (imag > 0 ? "+" : "") << imag << "j" << endl;
         }
-        if (imag != 0)
-        {
-            cout << ((imag > 0) ? "+" : "") << imag << "j";
-           
-        }
-        cout << endl;
     }
+}
 };
 
 int main()
