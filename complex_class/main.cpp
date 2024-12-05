@@ -10,6 +10,27 @@ private:
     int imag;
 
 public:
+    // Constructors function
+    Complex (int real , int image){
+        this->real= real;
+        this->imag = image;
+    }
+
+    Complex (int real){
+        this->real= real;
+        this->imag = 0;
+    }
+
+    Complex (){
+        this->real = 0;
+        this->imag = 0;
+    }
+
+    // Destructor function
+    ~Complex (){
+        cout << "The Object is now Dead :(" << endl;
+    }
+
     void setReal(int value)
     {
         real = value;
@@ -18,7 +39,8 @@ public:
     {
         imag = value;
     }
-    void setRealAndImag(int realValue, int imagValue)
+    // setComplex
+    void setComplex(int realValue, int imagValue)
     {
         real = realValue;
         imag = imagValue;
@@ -36,7 +58,7 @@ public:
     Complex add(Complex &otherObject)
     {
         Complex result;
-        result.setRealAndImag(
+        result.setComplex(
             real + otherObject.real,
             imag + otherObject.imag);
         return result;
@@ -44,7 +66,7 @@ public:
     Complex sub(Complex &otherObject)
     {
         Complex result;
-        result.setRealAndImag(
+        result.setComplex(
             real - otherObject.real,
             imag - otherObject.imag);
         return result;
@@ -70,18 +92,18 @@ public:
 int main()
 {
     Complex num_1;
-    num_1.setRealAndImag(13, 0);
+    num_1.setComplex(13, 0);
     // real only
     num_1.display();
 
     Complex num_2;
-    num_2.setRealAndImag(0, -49);
+    num_2.setComplex(0, -49);
     //imag only
     num_2.display();
 
 
     Complex num_3;
-    num_3.setRealAndImag(0, 0);
+    num_3.setComplex(0, 0);
     // 0 0 case
     num_3.display();
 
