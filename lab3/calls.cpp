@@ -116,6 +116,7 @@ int main()
     s1.push(2);
     s1.push(10);
     int *arr = s1.getArr();
+
     /* for(int i = 0; i <= s1.getTop(); i++){
         cout<<arr[i]<<endl;
     }*/
