@@ -3,193 +3,217 @@
 
 using namespace std;
 
-// Base Shape class
 class Shape {
-protected:
-    int color;
-public:
-    Shape(int c = WHITE) : color(c) {
-        setcolor(color);
-    }
-    virtual void draw() = 0;  // Pure virtual function
-    
-    void setShapeColor(int c) {
-        color = c;
-        setcolor(color);
-    }
-    
-    int getColor() const { return color; }
+    protected: 
+        int color;
+
+    public:
+        Shape(int c = CYAN)
+        {
+            std::cout << "The Shape instance has been created!"<< std::endl;
+            color = c;
+            setcolor(c);
+        }   
+        ~Shape ()
+        {
+            std::cout << "The Shape instance has been destroyed!"<< std::endl;
+        } 
+
+        virtual void draw() = 0;
+
+        int getColor() {return color; }  
 };
 
-class Point {
+class Point
+{
 private:
     int x, y;
+
 public:
     Point() : x(0), y(0) {}
     Point(int x1, int y1) : x(x1), y(y1) {}
-    
-    int getX() const { return x; }
-    int getY() const { return y; }
+
+    int getX() { return x; }
+    int getY() { return y; }
 };
 
-class Line : public Shape {
+class Line : public Shape
+{
 private:
     Point start;
     Point end;
 
 public:
-    Line() : Shape(BLUE), start(), end() {}
-    Line(int x1, int y1, int x2, int y2, int c = BLUE) 
-        : Shape(c), start(x1, y1), end(x2, y2) {}
+    Line() :Shape(RED),  start(), end() {}
+    Line(int x1, int y1, int x2, int y2, int c = RED) :Shape(c) , start(x1, y1), end(x2, y2) {}
 
-    void draw() override {
+    void draw() override
+    {
         setcolor(color);
         line(start.getX(), start.getY(), end.getX(), end.getY());
     }
 };
 
-class Rect : public Shape {
+class Rect : public Shape
+{
 private:
     Point ul;
     Point lr;
 public:
-    Rect() : Shape(RED), ul(), lr() {}
-    Rect(int x1, int y1, int x2, int y2, int c = RED) 
-        : Shape(c), ul(x1, y1), lr(x2, y2) {}
+    Rect() : Shape(GREEN), ul(), lr() {}
+    Rect(int x1, int y1, int x2, int y2, int c) : Shape(c), ul(x1, y1), lr(x2, y2) {}
 
-    void draw() override {
+    void draw()
+    {
         setcolor(color);
         rectangle(ul.getX(), ul.getY(), lr.getX(), lr.getY());
     }
 };
 
-class Text : public Shape {
+class Text : public Shape
+{
 private:
-    char* value;
+    char *value;
     Point position;
     int fontSize;
 
 public:
-    Text(char* value, int x, int y, int c = GREEN) 
-        : Shape(c), position(x, y), fontSize(12) {
+    Text(char *value, int x, int y,int c = GREEN)
+    {
         this->value = value;
+        this->fontSize = 12;
+        this->position = Point(x, y);
+        this->color = c;
     }
-    
-    void draw() override {
+    void draw()
+    {
+        settextstyle(DEFAULT_FONT, 0, this->fontSize);
+        outtextxy(this->position.getX(), this->position.getY(), this->value);
         setcolor(color);
-        settextstyle(DEFAULT_FONT, 0, fontSize);
-        outtextxy(position.getX(), position.getY(), value);
     }
 
-    void setFontSize(int fs) {
-        fontSize = fs;
+    void setFontSize(int fs){
+        this->fontSize = fs;
     }
 };
 
-class Circle : public Shape {
+class Circle : public Shape
+{
 private:
     Point center;
     int radius;
 
 public:
-    Circle() : Shape(YELLOW), center(), radius(0) {}
-    Circle(int m, int n, int r, int c = YELLOW) 
-        : Shape(c), center(m, n), radius(r) {}
+    Circle() :Shape(YELLOW) ,center(), radius(0) {}
+    Circle(int m, int n, int r, int c = WHITE) :Shape(c), center(m, n), radius(r) {}
 
-    void draw() override {
+    void draw() override
+    {
         setcolor(color);
         circle(center.getX(), center.getY(), radius);
     }
 };
 
-class Picture {
+class Picture
+{
 private:
     int cNum, rNum, lNum, tNum;
-    Circle* pCircles;
-    Rect* pRects;
-    Line* pLines;
-    Text* texts;
+    Circle *pCircles;
+    Rect *pRects;
+    Line *pLines;
+    Text *texts;
 
 public:
-    Picture() : cNum(0), rNum(0), lNum(0), tNum(0),
-                pCircles(nullptr), pRects(nullptr), 
-                pLines(nullptr), texts(nullptr) {}
+    Picture() : cNum(0), rNum(0), lNum(0), pCircles(nullptr), pRects(nullptr), pLines(nullptr) {}
 
-    void setCircles(int cn, Circle* pC) {
+    void setCircles(int cn, Circle *pC)
+    {
         cNum = cn;
         pCircles = pC;
     }
 
-    void setRects(int rn, Rect* pR) {
+    void setRects(int rn, Rect *pR)
+    {
         rNum = rn;
         pRects = pR;
     }
 
-    void setLines(int ln, Line* pL) {
+    void setLines(int ln, Line *pL)
+    {
         lNum = ln;
         pLines = pL;
     }
 
-    void setTexts(int tn, Text* pT) {
+    void setTexts(int tn, Text *pT)
+    {
         tNum = tn;
-        texts = pT;
+        this->texts = pT;
     }
 
-    void paint() {
-        // Draw each type of shape with its color
-        for (int i = 0; i < cNum; i++) {
+    void paint()
+    {
+        for (int i = 0; i < cNum; i++)
+        {
             pCircles[i].draw();
         }
-        for (int i = 0; i < rNum; i++) {
+        for (int i = 0; i < rNum; i++)
+        {
             pRects[i].draw();
         }
-        for (int i = 0; i < lNum; i++) {
+        for (int i = 0; i < lNum; i++)
+        {
             pLines[i].draw();
         }
-        for (int i = 0; i < tNum; i++) {
+
+        for (int i = 0; i < this->tNum; i++)
+        {
             texts[i].draw();
         }
     }
 };
 
-int main() {
+int main()
+{
     int gd = DETECT, gm;
-    initgraph(&gd, &gm, "");
+    initgraph(&gd, &gm, "Hola");
+    int x, y;
 
     Picture myPic;
 
-    // Create shapes with different colors
-    Text t1 = Text("Hello", 30, 30, GREEN);
-    Text t2 = Text("World", 30, 120, LIGHTGREEN);
-    t1.setFontSize(5);
-    t2.setFontSize(5);
 
-    Circle cArr[3] = {
-        Circle(50, 50, 50, YELLOW),
-        Circle(200, 100, 100, LIGHTRED),
-        Circle(420, 50, 30, LIGHTCYAN)
-    };
+    // Center text in the top portion
+Text t1 = Text("Ahmed", 250, 30, CYAN);          // Centered horizontally, near top
+Text t2 = Text("Essam", 250, 80, LIGHTBLUE);     // Below first text
+t1.setFontSize(5);
+t2.setFontSize(5);
 
-    Rect rArr[2] = {
-        Rect(30, 40, 170, 100, RED),
-        Rect(420, 50, 500, 300, LIGHTRED)
-    };
+// Create a structured arrangement of shapes
+Circle cArr[3] = {
+    Circle(150, 200, 40, GREEN),    // Left circle
+    Circle(300, 200, 40, BLUE),     // Center circle
+    Circle(450, 200, 40, WHITE)     // Right circle
+};
 
-    Line lArr[2] = {
-        Line(420, 50, 300, 300, BLUE),
-        Line(40, 500, 500, 400, LIGHTBLUE)
-    };
+Rect rArr[2] = {
+    Rect(100, 300, 250, 400, RED),      // Left rectangle
+    Rect(350, 300, 500, 400, MAGENTA)   // Right rectangle
+};
 
-    Text tArr[2] = {t1, t2};
+Line lArr[2] = {
+    Line(100, 450, 300, 450, WHITE),    // Horizontal line
+    Line(400, 450, 600, 450, YELLOW)    // Parallel horizontal line
+};
 
-    myPic.setCircles(3, cArr);
-    myPic.setRects(2, rArr);
-    myPic.setLines(2, lArr);
-    myPic.setTexts(2, tArr);
+Text tArr[2] = {t1, t2};
+
+myPic.setCircles(3, cArr);
+myPic.setRects(2, rArr);
+myPic.setLines(2, lArr);
+myPic.setTexts(2, tArr);
+
 
     myPic.paint();
-    
-    getch();
-    closegraph();
+    printf("%c\n", getch());
+
     return 0;
 }
