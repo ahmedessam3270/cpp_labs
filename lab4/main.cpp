@@ -3,6 +3,8 @@
 
 using namespace std;
 
+
+
 class Shape {
     protected: 
         int color;
@@ -117,57 +119,31 @@ public:
 class Picture
 {
 private:
-    int cNum, rNum, lNum, tNum;
-    Circle *pCircles;
-    Rect *pRects;
-    Line *pLines;
-    Text *texts;
+    Shape ** shapes;
+    int size;
+    int top;
 
 public:
-    Picture() : cNum(0), rNum(0), lNum(0), pCircles(nullptr), pRects(nullptr), pLines(nullptr) {}
-
-    void setCircles(int cn, Circle *pC)
-    {
-        cNum = cn;
-        pCircles = pC;
+    Picture(int size)  {
+        shapes = new Shape*[size];
+        this->size = size;
+        top = 0;
     }
 
-    void setRects(int rn, Rect *pR)
-    {
-        rNum = rn;
-        pRects = pR;
+    void addShape(Shape * s){
+        if (top >= size){
+            return;
+        }
+        shapes[top] = s;
+        top++;
     }
 
-    void setLines(int ln, Line *pL)
-    {
-        lNum = ln;
-        pLines = pL;
-    }
-
-    void setTexts(int tn, Text *pT)
-    {
-        tNum = tn;
-        this->texts = pT;
-    }
 
     void paint()
     {
-        for (int i = 0; i < cNum; i++)
+        for (int i = 0; i < top; i++)
         {
-            pCircles[i].draw();
-        }
-        for (int i = 0; i < rNum; i++)
-        {
-            pRects[i].draw();
-        }
-        for (int i = 0; i < lNum; i++)
-        {
-            pLines[i].draw();
-        }
-
-        for (int i = 0; i < this->tNum; i++)
-        {
-            texts[i].draw();
+            shapes[i]->draw();
         }
     }
 };
@@ -178,38 +154,43 @@ int main()
     initgraph(&gd, &gm, "Hola");
     int x, y;
 
-    Picture myPic;
+    Picture myPic(10);
 
+    Text * t1 = new Text("Ahmed", 250, 10, CYAN); 
+    Text * t2 =  new Text("Essam", 250, 80, LIGHTBLUE);  
+    myPic.addShape(t1);
+    myPic.addShape(t2);
 
-    // Center text in the top portion
-Text t1 = Text("Ahmed", 250, 30, CYAN);          // Centered horizontally, near top
-Text t2 = Text("Essam", 250, 80, LIGHTBLUE);     // Below first text
-t1.setFontSize(5);
-t2.setFontSize(5);
+    Circle * cArr[3] = {
+        new Circle(150, 200, 40, GREEN),    // Left circle
+        new Circle(300, 200, 40, BLUE),     // Center circle
+        new Circle(450, 200, 40, WHITE)     // Right circle
+    };
 
-// Create a structured arrangement of shapes
-Circle cArr[3] = {
-    Circle(150, 200, 40, GREEN),    // Left circle
-    Circle(300, 200, 40, BLUE),     // Center circle
-    Circle(450, 200, 40, WHITE)     // Right circle
-};
+    for (int i = 0; i < 3; i++)
+    {
+        myPic.addShape(cArr[i]);
+    }
 
-Rect rArr[2] = {
-    Rect(100, 300, 250, 400, RED),      // Left rectangle
-    Rect(350, 300, 500, 400, MAGENTA)   // Right rectangle
-};
+    Rect * rArr[2] = {
+        new Rect(100, 300, 250, 400, RED),      // Left rectangle
+        new Rect(350, 300, 500, 400, MAGENTA)   // Right rectangle
+    };
 
-Line lArr[2] = {
-    Line(100, 450, 300, 450, WHITE),    // Horizontal line
-    Line(400, 450, 600, 450, YELLOW)    // Parallel horizontal line
-};
+    for (int i = 0; i < 2; i++)
+    {
+        myPic.addShape(rArr[i]);
+    }
 
-Text tArr[2] = {t1, t2};
+    Line * lArr[2] = {
+        new Line(100, 450, 300, 450, WHITE),    // Horizontal line
+        new Line(400, 450, 600, 450, YELLOW)    // Parallel horizontal line
+    };
 
-myPic.setCircles(3, cArr);
-myPic.setRects(2, rArr);
-myPic.setLines(2, lArr);
-myPic.setTexts(2, tArr);
+    for (int i = 0; i < 2; i++)
+    {
+        myPic.addShape(lArr[i]);
+    }
 
 
     myPic.paint();
